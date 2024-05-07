@@ -1,0 +1,25 @@
+{
+  "name": "jscommon",
+  "version": "1.0.0",
+  "description": "Common code used across packages",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/eddiedunn/jscommon.git"
+  },
+  "author": "Eddie Dunn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eddiedunn/jscommon/issues"
+  },
+  "homepage": "https://github.com/eddiedunn/jscommon#readme",
+  "dependencies": {
+    "keytar": "^7.9.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
