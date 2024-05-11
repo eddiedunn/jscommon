@@ -1,8 +1,15 @@
 const sqlite3 = require('sqlite3').verbose();
 const axios = require('axios');
 require('dotenv').config();
+const delay = ms => new Promise(res => setTimeout(res, ms));
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
 
-const abiDB = new sqlite3.Database('./src/blockchain/db/abi_cache.db');
+const dir = path.join(os.homedir(), '.local', 'share');
+const dbPath = path.join(dir, 'abi_cache.db');
+
+const abiDB = new sqlite3.Database(dbPath);
 
 const getOrFetchAbi = (chainId, contractAddress, etherscanBaseUrl) => {
   return new Promise((resolve, reject) => {
@@ -15,10 +22,12 @@ const getOrFetchAbi = (chainId, contractAddress, etherscanBaseUrl) => {
       if (row) {
         resolve(JSON.parse(row.abi));
       } else {
-        const apiKey = process.env.ETHERSCAN_API_KEY;
-        const url = `${etherscanBaseUrl}/api?module=contract&action=getabi&address=${contractAddress}&apikey=${apiKey}`;
+        // const apiKey = process.env.ETHERSCAN_API_KEY;
+        // const url = `${etherscanBaseUrl}/api?module=contract&action=getabi&address=${contractAddress}&apikey=${apiKey}`;
+        const url = `${etherscanBaseUrl}/api?module=contract&action=getabi&address=${contractAddress}`;
 
         try {
+          await delay(2000); // wait for 2 seconds
           const response = await axios.get(url);
           if (response.data.status === '1' && response.data.message === 'OK') {
             const abi = JSON.parse(response.data.result);

@@ -1,10 +1,19 @@
 const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
 
-let db = new sqlite3.Database('./db/abi_cache.db', (err) => {
+const dir = path.join(os.homedir(), '.local', 'share');
+const dbPath = path.join(dir, 'abi_cache.db');
+
+fs.mkdirSync(dir, { recursive: true });
+
+let db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error(err.message);
+  } else {
+    console.log('Connected to the abi_cache.db database.');
   }
-  console.log('Connected to the abi_cache.db database.');
 });
 
 db.serialize(() => {
