@@ -13,6 +13,7 @@ const abiDB = new sqlite3.Database(dbPath);
 
 const getOrFetchAbi = (chainId, contractAddress, etherscanBaseUrl) => {
   return new Promise((resolve, reject) => {
+    console.log(`Fetching ${contractAddress} ABI from cache or Etherscan...`);
     abiDB.get("SELECT abi FROM abi_cache WHERE chainid = ? AND contract = ?", [chainId, contractAddress], async (err, row) => {
       if (err) {
         reject(err);
