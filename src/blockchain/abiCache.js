@@ -13,7 +13,6 @@ const abiDB = new sqlite3.Database(dbPath);
 
 const getOrFetchAbi = (chainId, contractAddress, etherscanBaseUrl) => {
   return new Promise((resolve, reject) => {
-    console.log(`Fetching ${contractAddress} ABI from cache or Etherscan...`);
     abiDB.get("SELECT abi FROM abi_cache WHERE chainid = ? AND contract = ?", [chainId, contractAddress], async (err, row) => {
       if (err) {
         reject(err);
@@ -23,14 +22,13 @@ const getOrFetchAbi = (chainId, contractAddress, etherscanBaseUrl) => {
       if (row) {
         resolve(JSON.parse(row.abi));
       } else {
+        // remove 5 second wait below if you have an Etherscan API key
         // const apiKey = process.env.ETHERSCAN_API_KEY;
         // const url = `${etherscanBaseUrl}/api?module=contract&action=getabi&address=${contractAddress}&apikey=${apiKey}`;
         const url = `${etherscanBaseUrl}/api?module=contract&action=getabi&address=${contractAddress}`;
-
         try {
-          await delay(2000); // wait for 2 seconds
           const response = await axios.get(url);
-          if (response.data.status === '1' && response.data.message === 'OK') {
+          if (response.data.status === '1' && response.data.message.startsWith('OK')) {
             const abi = JSON.parse(response.data.result);
             abiDB.run("INSERT INTO abi_cache (chainid, contract, abi) VALUES (?, ?, ?)", [chainId, contractAddress, JSON.stringify(abi)], err => {
               if (err) {
@@ -46,6 +44,7 @@ const getOrFetchAbi = (chainId, contractAddress, etherscanBaseUrl) => {
           console.error('Error fetching ABI from Etherscan:', error);
           reject(error);
         }
+        await delay(5000); // wait for 5 seconds for rate limiting
       }
     });
   });
