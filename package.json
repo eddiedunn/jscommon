@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/eddiedunn/jscommon#readme",
   "dependencies": {
-    "keytar": "^7.9.0"
+    "axios": "^1.6.8",
+    "keytar": "^7.9.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "jest": "^29.7.0"
