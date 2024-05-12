@@ -63,6 +63,10 @@ INSERT INTO dex_type (dex_type_name) VALUES ('univ2');
 INSERT INTO dex (chainid, dex_name, dex_typeid) SELECT id, 'uniswap', (SELECT id FROM dex_type WHERE dex_type_name = 'univ2') FROM chain WHERE chain_name = 'Ethereum';
 INSERT INTO dex (chainid, dex_name, dex_typeid) SELECT id, 'sushiswap', (SELECT id FROM dex_type WHERE dex_type_name = 'univ2') FROM chain WHERE chain_name = 'Ethereum';
 
+-- Insert records into univ2 using fetched chainid
+INSERT INTO univ2 (dexid, v2_router_address, factory_address) SELECT id, '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D', '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f' FROM dex WHERE dex_name = 'uniswap';
+INSERT INTO univ2 (dexid, v2_router_address, factory_address) SELECT id, '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F', '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac' FROM dex WHERE dex_name = 'sushiswap';
+
 -- Insert records into token using fetched chainid
 INSERT INTO token (chainid, name, address) SELECT id, 'WETH', '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2' FROM chain WHERE chain_name = 'Ethereum';
 INSERT INTO token (chainid, name, address) SELECT id, 'DAI', '0x6B175474E89094C44Da98b954EedeAC495271d0F' FROM chain WHERE chain_name = 'Ethereum';
