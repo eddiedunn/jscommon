@@ -1,6 +1,6 @@
 {
   "name": "jscommon",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Common code used across packages",
   "main": "index.js",
   "scripts": {
